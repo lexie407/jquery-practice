@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery測試</title>
+    <style>
+        h1{
+            font-size:3-px;
+            border:1px solid red;
+        }
+    </style>
+   
+</head>
+<body>
+    <h1 style="color:red;">內容大標題1</h1>
+    <h1 style="color:red;">內容大標題1</h1>
+    <h1 style="color:red;">內容大標題1</h1>
+
+    <script>
+        //抓處每一個紅框跳彈窗
+        document.addEventListener("DOMContentLoaded", function() {
+            let h1_el = document.getElementsByTagName("h1");
+            //console.log(h1_el); //[h1, h1, h1]
+            for(let i = 0; i < h1_el.length; i++){
+                h1_el[i].addEventListener("click", function() {
+                //console.log(i); 
+                alert("你點擊了標題");
+            });
+
+            }
+          
+        });
+
+    /*
+    這是jQuery的寫法
+
+    $(function(){
+        $("h1").on("click", function(){
+            alert("你點擊了標題");
+        });
+    })
+        
+    */
+
+
+    </script>
+</body>
+</html>

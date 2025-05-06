@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        input.card {
+            width: 42px;
+        }
+
+        .-error {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="https://tw.yahoo.com" method="get" id="the_form">
+
+        <div class="group">
+            <label for="account">帳號：</label>
+            <input type="text" id="account">
+        </div>
+
+        <div class="group">
+            <label for="email">email：</label>
+            <input type="email" id="email">
+        </div>
+
+        <div class="group">
+            <label>信用卡卡號：</label>
+            <input type="text" class="card" maxlength="4">
+            <input type="text" class="card" maxlength="4">
+            <input type="text" class="card" maxlength="4">
+            <input type="text" class="card" maxlength="4">
+        </div>
+
+        <div class="group">
+            <label>商品數量：</label>
+            <input type="range" min="1" max="10" value="5" class="product_count">
+            <span class="num" data-default="5">5</span>
+        </div>
+
+        <div class="group">
+            <button type="reset">清空</button>
+            <button type="submit">資料送出</button>
+        </div>
+
+    </form>
+    <script src="./vendors/jquery/jquery-3.7.1.min.js">
+    </script>
+    <script src="./vendors/is/is.min.js">
+    </script>
+
+
+    <script>
+        $(function () {
+            // console.log("ppp")
+
+            //===處理卡號只能輸入數字，且可以跨欄位刪除
+            $("input.card").on("keydown", function (e) {
+                // console.log("keydown");
+                // console.log(e.which);//測試keyCode48~57，刪除鍵預設為8
+                // e.preventDefault(); //反著做，停止預設行為
+                if ((e.which >= 48 && e.which <= 57) || e.which == 8) {
+                    // console.log(this.value)//this(當前元素)代替e.target，取出欄位上的資料(輸入數字的前面值)
+                    // console.log($(this).val().length);//取出當前欄位的長度
+                    if ($(this).val().length == 0 && e.which == 8) {
+                        // console.log("ttt")//檢查欄位刪除到底就會印出
+                        $(this).prev().focus();//找同層級的前一個元素，將輸入焦點換過去
+                    }
+
+                } else {
+                    e.preventDefault();
+                }
+            });
+
+
+            //--keyup處理資料存入
+            // ### (註1)前端有處理，後端還是要驗證，避免存入資料庫格式錯誤
+            // let data = "12的34的字";
+            // // let new_data = data.replace("的", ""); //只把找到的第一個字取代掉
+            // let new_data = data.replace(/\D/g, ""); //正規式寫法\D代表非數字，g代表全域取代
+            // console.log(new_data);
+
+            $("input.card").on("keyup", function (e) {
+                // console.log("keyup");
+                // console.log($(this).val());//抓欄位上的資料->放在keyup事件裡就可以取到輸入當下的值?
+
+                let new_str = ($(this).val()).replace(/\D/g, "");//正規化(註1)
+                // console.log(new_str);
+                // this.value = new_str; //將新的值放回欄位上
+                $(this).val(new_str);
+
+                if (new_str.length == 4) {
+                    $(this).next().focus();
+                }
+
+            });
+
+
+            //===處理range bar滑動可顯示商品數量
+            $("input.product_count").on("input", function () { //input事件:資料有異動就會觸發
+                // console.log($(this).val()); //抓取當前的值
+                $("span.num").html($(this).val()); //將文字內容放到span標籤裡面
+            });
+
+            $("#the_form").on("reset", function () {
+                // console.log($("input.product_count").val()); //檢查清空後range bar數值變化
+                $("span.num").html($("span.num").attr("data-default")); //將span標籤的內容改成預設值
+            });
+
+            //===帳號驗證:未符合文字框顯示紅框(帳號、email、卡號)
+            $("#the_form").on("submit", function (e) {
+                // e.preventDefault();//停止預設行為(不送出表單)
+
+                //--卡號先處理(有四個欄位，先串接成一個字串card_str)
+                let card_str = "";
+                $("input.card").each(function (i, item) {
+                    // console.log(item); 
+                    // console.log($(item).val()); //抓取當前的值
+                    card_str += $(item).val(); //將四個欄位的值串接起來
+                });
+
+                // condole.log(card_str); //檢查串接後的值
+
+                let send_data = true;//預設為true，代表可以送出資料
+                //--驗證帳號
+                if ($("#account").val() == "") { //如果是空字串，代表驗證不通過
+                    $("#account").addClass("-error"); //加上警告紅框
+                    send_data = false; //改變預設值為false，代表不可以送出資料
+
+                } else {  //驗證通過
+                    $("#account").removeClass("-error"); //移除紅框
+                }
+
+                //--Email驗證--載入is.min.js的資料驗證
+                if (is.email($("#email").val())) { //如果是正確的email格式，代表驗證通過
+                    $("#email").removeClass("-error"); //移除紅框
+
+                } else { //驗證不通過
+                    $("#email").addClass("-error"); //加上警告紅框
+                    send_data = false; //改變預設值為false，代表不可以送出資料
+                };
+
+                //--卡號驗證--載入is.min.js的資料驗證
+                if (is.creditCard(card_str)) { //
+                    $("input.card").each(function (i, item) {
+                        $(item).removeClass("-error"); //移除紅框
+                    });
+                    
+
+                } else { //驗證不通過
+                    $("input.card").each(function (i, item) {
+                        $(item).addClass("-error"); //加上警告紅框
+                        // $("input.card").addClass("-error"); //也可以改成這樣寫
+                    });
+                    send_data = false; //改變預設值為false，代表不可以送出資料
+                };
+                
+
+
+                //--送出審核前的最後一道審核基準
+
+                if (!send_data) {
+                    e.preventDefault();
+                }
+
+
+            })
+
+
+
+
+
+
+        });
+
+    </script>
+</body>
+
+</html>

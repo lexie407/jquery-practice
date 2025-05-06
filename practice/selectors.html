@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="utf-8">
+    <title>jQuery 相關練習</title>
+</head>
+
+<body>
+    <h1>這是標題</h1>
+    <h1 id="my_title">這是我的標題</h1>
+    <p>這是段落1</p>
+    <p class="para para2">這是段落2</p>
+    <p class="para para3">段是段落3</p>
+
+    <hr>
+    <p class="para para4">段是段落4</p>
+
+    <div>
+        <a href="#" target="_blank">這是連結</a>
+        <p>div 裡的段落</p>
+        <section>
+            <p>div 裡更內層的段落</p>
+        </section>
+        <p>div 裡的段落</p>
+    </div>
+
+    <p>其它段落1</p>
+    <p>其它段落2</p>
+
+    <p id="p1">段落1</p>
+    <p id="p2">段落2</p>
+    <p id="p3">段落3</p>
+
+    <div id="outer_div">
+        <div id="inner_div">
+          <p>段落</p>
+          <ol id="ol_list">
+            <li id="i1">項目一</li>
+            <li id="i2">項目二</li>
+            <li id="i3">項目三</li>
+          </ol>
+        </div>
+      </div>
+
+      <p id = "my_para">AAA</p>
+
+    <script src="./vendors/jquery/jquery-3.7.1.min.js"></script>
+    <script>
+        // ==選取器使用==
+        /*
+          $("h1").css("color", "red");  //找出所有h1標籤
+          $("p").css("color", "red");   //找出所有p標籤
+      
+    
+        //# id選取器
+          $("#my_title").css("color", "red"); //找出id為my_title的標籤
+          $("h1#my_title").css("color", "red"); //js寫法是document.getElementById("my_title").style.color = "red";
+    
+        //.class選取器
+          $(".para").css("color", "red"); //js寫法是document.getElementsByClassName("para")[0].style.color = "red";
+          $(".para2").css("color", "red"); //js寫法是document.getElementsByClassName("para2")[0].style.color = "red";
+          $("p.para3").css("color", "red"); //js寫法是document.getElementsByClassName("para3")[0].style.color = "red";
+    
+    
+        //==屬性選取器[]==
+          //不限定標籤
+          $("[id='my_title']").css("color", "red"); //js寫法是document.getElementById("my_title").style.color = "red";
+          //限定標籤h1
+          $("h1[id='my_title']").css("color", "red");//js寫法是document.getElementById("my_title").style.color = "red";
+          //屬性值不等於 ( != )
+          $("h1[id!='my_title']").css("color", "red");//js寫法是document.getElementsByTagName("h1")[0].style.color = "red";
+          //屬性值開頭等於 ( ^= )
+          $("h1[id^='my_']").css("color", "red");//js寫法是document.getElementsByTagName("h1")[0].style.color = "red";
+          //屬性值結尾等於 ( $= )
+          $("h1[id$='tle']").css("color", "red");//js寫法是document.getElementsByTagName("h1")[0].style.color = "red";
+    
+     
+    
+        //==符號選取器== *全 ,  > +, ~, , ==
+        $("*").css("color", "red");         //全部 ,js寫法是document.getElementsByTagName("*")[0].style.color = "red";
+        $("h1, p").css("color", "red");     //或
+    
+        $("div p").css("color", "red");     //所有子孫元素 descendant
+        $("div > p").css("color", "red");   //所有子元素 child(第一代)
+    
+        $("p + p").css("color", "red");     //同層級下一個相鄰元素 adjacent sibling，比對true才顯示
+        $("div ~ p").css("color", "red");   //所有同層所有相鄰元素 general sibling(兄弟元素)
+    
+       
+
+        //==偽類別選取器== 
+        // :first-child, :last-child, :only-child, :nth-child(n),
+        $("p:first-child").css("color", "red");   //第一個子元素,js寫法是document.getElementsByTagName("p")[0].style.color = "red";
+        $("p:last-child").css("color", "red");    //最後一個子元素
+        $("p:only-child").css("color", "red");    //唯一的子元素
+        $("p:nth-child(3)").css("color", "red");  //第三個子元素
+  */
+
+        //==篩選器 Filters== chain的寫法
+  /*
+        // $("p").first().css("color", "red");
+        // $("p").last().css("color", "red");
+
+        // $("p").eq(0).css("color", "red"); // 第 1 個，等於，等於.first()
+        // $("p").eq(1).css("color", "red"); // 第 2 個
+        // $("p").eq(-1).css("color", "red"); // 倒數第 1 個，等於.last()
+        // $("p").eq(-2).css("color", "red"); // 倒數第 2 個
+
+        //判斷是否符合指定的規則
+        // console.log($("#my_title").is("h1")); // true
+        // console.log($("#my_title").is("p")); // false
+
+        // console.log($("#my_title").is(":nth-child(2)")); // true
+        // console.log($("#my_title").is(":nth-child(3)")); // false
+
+*/
+
+        //==Traversing往哪裡找==
+
+        // $("#p2").prev().css("color", "red"); //同層級前一個//元素.previousElementSibling.style.color = "red";
+        // $("#p2").next().css("color", "red"); //同層級下一個//元素.nextElementSibling.style.color = "red";
+
+        // $("#i1").closest("#outer_div").css("border", "1px solid red"); //往父層找//元素.closest("div").style.border = "1px solid red";
+        // $("#outer_div").children().css("border", "1px solid red"); //往子層找//元素.children[0].style.border = "1px solid red";(屬性選取器)
+        // $("#ol_list").children().css("border", "1px solid red"); //往子層找//元素.children[0].style.border = "1px solid red";(屬性選取器)
+        // $("#inner_div").children("p").css("border", "1px solid red"); //往第一層找//元素.children[0].style.border = "1px solid red";(屬性選取器)
+        
+        // $("#outer_div").find("p").css("border", "1px solid red");//往內層找所有//querySelectorAll("p").forEach(function(p){p.style.border = "1px solid red";});
+        // $("#outer_div").find("li").css("border", "1px solid red");//往內層找所有
+
+        let para_el = document.getElenmentById("my_para");
+        $(para_el).html();
+        $(this)//如果明確知道是哪個變數的話可以用this
+
+
+
+    </script>
+</body>
+
+</html>

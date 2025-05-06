@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <title>check_all</title>
+</head>
+
+<body>
+    <input type="checkbox" id="check_all"><label for="check_all">全選</label>
+
+    <hr>
+
+    <input type="checkbox" class="item" id="option1"> <label for="option1">選項一</label>
+    <input type="checkbox" class="item" id="option2"> <label for="option2">選項二</label>
+    <input type="checkbox" class="item" id="option3"> <label for="option3">選項三</label>
+    
+    <script src="./vendors/jquery/jquery-3.7.1.min.js">
+    </script>
+    <script>
+        $("#check_all").on("click", function(){ //當全選被點擊時
+            console.log($(this).prop("checked"));//檢查全選標籤有沒有被勾選到//相當於console.log(this.checked);
+            // $("input.item").prop("checked", true);//設定的item標籤都設為checked
+            $("input.item").prop("checked", $(this).prop("checked"));//可以省略跑迴圈切換
+
+        });
+
+        $("input.item").on("click", function(){//當item被點擊時
+            // console.log("yyy");
+            // console.log($("input.item").length );//檢查有幾個item標籤
+            // console.log($("input.item:checked").length)//檢查有幾個item標籤被勾選到
+            // if($("input.item").length == $("input.item:checked").length){            
+            //     $("#check_all").prop("checked", true);//如果item標籤的數量等於被勾選的數量，則全選標籤也要被勾選到
+            // }else{
+            //     $("#check_all").prop("checked", false);//否則全選標籤不被勾選到
+            // }
+
+            //簡化寫成一行，將條件判斷式替換掉true
+            $("#check_all").prop("checked", $("input.item").length == $("input.item:checked").length);
+
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查詢郵遞區號</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        form.my_form {
+            width: 500px;
+            margin: 0 auto;
+            border: 1px solid lightgray;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        form.my_form>div.block {
+            display: flex;
+        }
+
+        form.my_form>div.block>label {
+            width: 100px;
+            text-align: right;
+            flex-shrink: 0;
+            position: relative;
+            top: 2px;
+            display: inline-block;
+        }
+
+        form.my_form>div.block>div.input_group {
+            flex-grow: 1;
+        }
+
+        form.my_form input#zipcode {
+            width: 40px;
+        }
+
+        form.my_form input.text {
+            border-radius: 3px;
+            border: 1px solid lightgray;
+            font-size: 16px;
+            padding: 0 5px;
+            height: 28px;
+        }
+
+        form.my_form div.input_group div.addr_block {
+            display: flex;
+        }
+
+        form.my_form select,
+        form.my_form input.addr {
+            border-radius: 3px;
+            border: 1px solid lightgray;
+            font-size: 16px;
+            padding: 0 5px;
+            height: 28px;
+            border-right: 0;
+            border-radius: 0;
+        }
+
+        form.my_form input.addr {
+            border-radius: 3px 0 0 3px;
+        }
+
+        form.my_form select:last-child {
+            border-right: 1px solid lightgray;
+            border-radius: 0 3px 3px 0;
+        }
+    </style>
+
+</head>
+
+<body>
+    <form class="my_form" action="#" method="#">
+
+        <div class="block">
+            <label>地址：</label>
+            <div class="input_group">
+                <div class="addr_block">
+                    <!-- 唯讀欄位 -->
+                    <input type="text" id="zipcode" class="addr" readonly> 
+                    
+                    <!-- 下拉選單暫時無選項，設置維空標籤 -->
+                    <select id="city"></select> 
+                    <select id="area"></select> 
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+    
+    <script src="./vendors/jquery/jquery-3.7.1.min.js">
+    </script>
+    <script>
+        // addeData[][]二維陣列: [0]台北市-arear [1]基隆市
+        var addrData = [
+            {
+                "city": "臺北市",
+                "area": [
+                    {
+                        "name": "中正區",
+                        "zipcode": "100"
+                    },
+                    {
+                        "name": "大同區",
+                        "zipcode": "103"
+                    },
+                    {
+                        "name": "中山區",
+                        "zipcode": "104"
+                    },
+                    {
+                        "name": "松山區",
+                        "zipcode": "105"
+                    },
+                    {
+                        "name": "大安區",
+                        "zipcode": "106"
+                    },
+                    {
+                        "name": "萬華區",
+                        "zipcode": "108"
+                    },
+                    {
+                        "name": "信義區",
+                        "zipcode": "110"
+                    },
+                    {
+                        "name": "士林區",
+                        "zipcode": "111"
+                    },
+                    {
+                        "name": "北投區",
+                        "zipcode": "112"
+                    },
+                    {
+                        "name": "內湖區",
+                        "zipcode": "114"
+                    },
+                    {
+                        "name": "南港區",
+                        "zipcode": "115"
+                    },
+                    {
+                        "name": "文山區",
+                        "zipcode": "116"
+                    }
+                ]
+            },
+            {
+                "city": "基隆市",
+                "area": [
+                    {
+                        "name": "仁愛區",
+                        "zipcode": "200"
+                    },
+                    {
+                        "name": "信義區",
+                        "zipcode": "201"
+                    },
+                    {
+                        "name": "中正區",
+                        "zipcode": "202"
+                    },
+                    {
+                        "name": "中山區",
+                        "zipcode": "203"
+                    },
+                    {
+                        "name": "安樂區",
+                        "zipcode": "204"
+                    },
+                    {
+                        "name": "暖暖區",
+                        "zipcode": "205"
+                    },
+                    {
+                        "name": "七堵區",
+                        "zipcode": "206"
+                    }
+                ]
+            }
+        ];
+
+        // 取得城市下拉選單(用迴圈取陣列裡的值，進而建立表單內容html)
+        function addr_init(){
+            $.each(addrData, function (i, item) {
+                // console.log(i); //i陣列索引值 item陣列
+                // console.log(item.city); //取得縣市資料
+                // console.log(item.area); //取得行政區資料
+                let city_str = `
+                <option value = "${item.city}">${item.city}</option>
+                `;
+                $("#city").append(city_str); //將縣市資料加入下拉選單
+
+                //確認目前所在的迴圈是哪個縣市，執行對應的第二個選單生成涵式
+                // if(item.city == city_str){
+                //     area_init(item.area);
+                //     }
+
+                });
+        }
+
+        
+        addr_init();
+
+        //取得第二個下拉選單
+        // function area_init(areas){
+        //     console.log(areas);
+        //     $.each(areas, function(i, item){
+        //         // console.log(item);
+        //         let area_str = `
+        //         <option value = "${item.zipcode}">${item.name}</option> 
+        //         `;
+        //         $("#area").append(area_str); 
+                
+        //         if(i == 0){
+        //             $("#zipcode").val(item.zipcode); //將第一個行政區的郵遞區號填入第一個欄位
+        //         }
+                
+        //     });
+
+        // }
+        
+        //變換行政區時，郵遞區號會改變
+        // $("#area").on("change", function(){
+        //     // console.log("ttt"); //檢查做什麼事情時會觸發
+        //     // console.log((this).val());//取得選取的值
+        //     $("#zipcode").val($(this).val()); //將選取的值填入第一個欄位
+        // });
+
+
+        //變換縣市時，區域選單內容需要更換
+        // $("#city").on("change", function(){
+        //     $("#area").empty(); //清空第二個下拉選單的內容
+
+        //     let city_str = $(this).val(); //取得選取的縣市名稱
+        //     // console.log(cuty_star);
+
+        //     $.each(addrData, function(i, item){
+        //         // console.log(item); //取得縣市資料
+        //         if(item.city == city_str){ //確認目前所在的迴圈是哪個縣市，執行對應的第二個選單生成涵式
+        //             area_init(item.area); //將對應的行政區資料加入第二個下拉選單
+        //         }
+        //     });
+
+        // });
+
+    </script>
+</body>
+
+</html>
